@@ -1,1 +1,467 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Великие битвы Великой Отечественной</title>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1976d2;
+            --dark: #212121;
+            --light: #f5f5f5;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            opacity: 0.9;
+        }
+        
+        .slider-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slider {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+            will-change: transform;
+        }
+        
+        .slide {
+            min-width: 100%;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .battle-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            transition: var(--transition);
+        }
+        
+        .battle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .battle-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .battle-title {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            margin-bottom: 0.5rem;
+        }
+        
+        .battle-subtitle {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            opacity: 0.9;
+        }
+        
+        .battle-content {
+            padding: 1.5rem;
+        }
+        
+        .battle-image {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .battle-facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .fact-card {
+            background: #f9f9f9;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .fact-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem;
+            gap: 0.5rem;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+        
+        .nav-arrows {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            padding: 0 1rem;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .arrow {
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+        
+        .arrow:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .battle-facts {
+                grid-template-columns: 1fr;
+            }
+            
+            .arrow {
+                width: 30px;
+                height: 30px;
+            }
+        }
+        
+        /* Поддержка старых браузеров */
+        @supports not (display: grid) {
+            .battle-facts {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .fact-card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Великие битвы Великой Отечественной</h1>
+            <div class="subtitle">Перелистывайте, чтобы узнать о ключевых сражениях</div>
+        </header>
+        
+        <div class="slider-container">
+            <div class="slider">
+                <!-- Московская битва -->
+                <div class="slide">
+                    <div class="battle-card">
+                        <div class="battle-header">
+                            <h2 class="battle-title">Московская битва</h2>
+                            <div class="battle-subtitle">30 сентября 1941 - 20 апреля 1942</div>
+                        </div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Bundesarchiv_Bild_183-1987-0822-502%2C_Russland%2C_Kampf_um_Moskau.jpg/800px-Bundesarchiv_Bild_183-1987-0822-502%2C_Russland%2C_Kampf_um_Moskau.jpg" alt="Московская битва" class="battle-image" loading="lazy">
+                        <div class="battle-content">
+                            <p>Московская битва - одно из важнейших сражений Великой Отечественной войны, в ходе которого советские войска остановили наступление немецкой армии на столицу СССР и нанесли ей первое крупное поражение.</p>
+                            
+                            <div class="battle-facts">
+                                <div class="fact-card">
+                                    <div class="fact-title">Силы сторон</div>
+                                    <p>СССР: ~1.25 млн человек<br>
+                                    Германия: ~1.9 млн человек</p>
+                                </div>
+                                <div class="fact-card">
+                                    <div class="fact-title">Потери</div>
+                                    <p>СССР: ~1.8 млн человек<br>
+                                    Германия: ~500 тыс. человек</p>
+                                </div>
+                                <div class="fact-card">
+                                    <div class="fact-title">Итог</div>
+                                    <p>Стратегическая победа СССР, срыв плана "Барбаросса"</p>
+                                </div>
+                            </div>
+                            
+                            <h3>Ход битвы</h3>
+                            <p>Битва за Москву состояла из двух этапов: оборонительного (30 сентября - 4 декабря 1941) и наступательного (5 декабря 1941 - 20 апреля 1942).</p>
+                            <p>В октябре 1941 года немецкие войска подошли к Москве на расстояние 25-30 км. 7 ноября на Красной площади состоялся легендарный парад, с которого войска уходили прямо на фронт.</p>
+                            <p>5 декабря началось контрнаступление советских войск, в результате которого противник был отброшен на 100-250 км от Москвы.</p>
+                            
+                            <h3>Значение</h3>
+                            <p>Победа под Москвой имела огромное военное и политическое значение: был развеян миф о непобедимости вермахта, укрепился моральный дух советского народа и армии, ускорилось формирование антигитлеровской коалиции.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Сталинградская битва -->
+                <div class="slide">
+                    <div class="battle-card">
+                        <div class="battle-header">
+                            <h2 class="battle-title">Сталинградская битва</h2>
+                            <div class="battle-subtitle">17 июля 1942 - 2 февраля 1943</div>
+                        </div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Bundesarchiv_Bild_183-W0506-316%2C_Russland%2C_Kampf_um_Stalingrad.jpg/800px-Bundesarchiv_Bild_183-W0506-316%2C_Russland%2C_Kampf_um_Stalingrad.jpg" alt="Сталинградская битва" class="battle-image" loading="lazy">
+                        <div class="battle-content">
+                            <p>Сталинградская битва - крупнейшее сухопутное сражение в истории человечества, которое стало переломным моментом в ходе Великой Отечественной войны и всей Второй мировой войны.</p>
+                            
+                            <div class="battle-facts">
+                                <div class="fact-card">
+                                    <div class="fact-title">Силы сторон</div>
+                                    <p>СССР: ~1.1 млн человек<br>
+                                    Германия и союзники: ~1.0 млн человек</p>
+                                </div>
+                                <div class="fact-card">
+                                    <div class="fact-title">Потери</div>
+                                    <p>СССР: ~1.1 млн человек<br>
+                                    Германия: ~1.5 млн человек</p>
+                                </div>
+                                <div class="fact-card">
+                                    <div class="fact-title">Итог</div>
+                                    <p>Решительная победа СССР, начало коренного перелома в войне</p>
+                                </div>
+                            </div>
+                            
+                            <h3>Ход битвы</h3>
+                            <p>Битва включала оборонительный этап (17 июля - 18 ноября 1942) и наступательный (19 ноября 1942 - 2 февраля 1943).</p>
+                            <p>Особенностью сражения стали ожесточённые уличные бои в разрушенном Сталинграде. Ключевыми точками обороны стали Мамаев курган, завод "Красный Октябрь", тракторный завод и дом Павлова.</p>
+                            <p>19 ноября началась операция "Уран" - советское контрнаступление, в результате которого 6-я армия вермахта была окружена и капитулировала 2 февраля 1943 года.</p>
+                            
+                            <h3>Значение</h3>
+                            <p>Сталинградская победа положила начало коренному перелому в войне, подорвала военный потенциал Германии и укрепила авторитет СССР на международной арене.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Курская битва -->
+                <div class="slide">
+                    <div class="battle-card">
+                        <div class="battle-header">
+                            <h2 class="battle-title">Курская битва</h2>
+                            <div class="battle-subtitle">5 июля - 23 августа 1943</div>
+                        </div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Bundesarchiv_Bild_183-H26258%2C_Panzer_V_%22Panther%22%2C_Prochorowka.jpg/800px-Bundesarchiv_Bild_183-H26258%2C_Panzer_V_%22Panther%22%2C_Prochorowka.jpg" alt="Курская битва" class="battle-image" loading="lazy">
+                        <div class="battle-content">
+                            <p>Курская битва - крупнейшее танковое сражение в истории, завершившее коренной перелом в ходе Великой Отечественной войны и закрепившее стратегическую инициативу за Советским Союзом.</p>
+                            
+                            <div class="battle-facts">
+                                <div class="fact-card">
+                                    <div class="fact-title">Силы сторон</div>
+                                    <p>СССР: ~1.9 млн человек<br>
+                                    Германия: ~900 тыс. человек</p>
+                                </div>
+                                <div class="fact-card">
+                                    <div class="fact-title">Потери</div>
+                                    <p>СССР: ~860 тыс. человек<br>
+                                    Германия: ~500 тыс. человек</p>
+                                </div>
+                                <div class="fact-card">
+                                    <div class="fact-title">Итог</div>
+                                    <p>Победа СССР, окончательный переход стратегической инициативы к Красной Армии</p>
+                                </div>
+                            </div>
+                            
+                            <h3>Ход битвы</h3>
+                            <p>Битва включала оборонительную (5-23 июля) и наступательную (12 июля - 23 августа) фазы. Основные события развернулись на северном (Орловском) и южном (Белгородском) фасах Курского выступа.</p>
+                            <p>12 июля произошло знаменитое танковое сражение под Прохоровкой, где сошлись около 1200 танков с обеих сторон.</p>
+                            <p>В результате операций "Кутузов" и "Румянцев" советские войска освободили Орёл и Белгород, а затем Харьков.</p>
+                            
+                            <h3>Значение</h3>
+                            <p>После Курской битвы вермахт окончательно утратил стратегическую инициативу и перешёл к обороне на всех фронтах. Эта победа создала условия для последующего наступления Красной Армии и освобождения территории СССР.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-arrows">
+                <div class="arrow prev">←</div>
+                <div class="arrow next">→</div>
+            </div>
+        </div>
+        
+        <div class="nav-dots">
+            <div class="dot active" data-slide="0"></div>
+            <div class="dot" data-slide="1"></div>
+            <div class="dot" data-slide="2"></div>
+        </div>
+        
+        <footer>
+            © Великие битвы Великой Отечественной войны | Память о подвиге народа
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.querySelector('.slider');
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            
+            let currentSlide = 0;
+            const slideCount = slides.length;
+            
+            // Функция для переключения слайдов
+            function goToSlide(n) {
+                slider.style.transform = `translateX(-${n * 100}%)`;
+                currentSlide = n;
+                updateDots();
+            }
+            
+            // Обновление активной точки
+            function updateDots() {
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            // Следующий слайд
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slideCount;
+                goToSlide(currentSlide);
+            }
+            
+            // Предыдущий слайд
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+                goToSlide(currentSlide);
+            }
+            
+            // Клик по точкам
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.getAttribute('data-slide'));
+                    goToSlide(slideIndex);
+                });
+            });
+            
+            // Кнопки навигации
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Обработка свайпов на мобильных устройствах
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            slider.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            slider.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    nextSlide(); // Свайп влево
+                }
+                if (touchEndX > touchStartX + 50) {
+                    prevSlide(); // Свайп вправо
+                }
+            }
+            
+            // Поддержка клавиатуры
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+            
+            // Адаптация для старых браузеров
+            if (!('transform' in document.body.style)) {
+                slider.style.marginLeft = `-${currentSlide * 100}%`;
+                
+                function oldGoToSlide(n) {
+                    slider.style.marginLeft = `-${n * 100}%`;
+                    currentSlide = n;
+                    updateDots();
+                }
+                
+                goToSlide = oldGoToSlide;
+            }
+        });
+    </script>
+</body>
+</html>
